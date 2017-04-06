@@ -12,7 +12,7 @@ import UIKit
     @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject])
 }
 
-class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate {
+class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate, FiltersViewControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     weak var delegate: FiltersViewControllerDelegate?
@@ -48,7 +48,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             filters["categories"] = selectedCategories as AnyObject
         }
         
-        delegate?.filtersViewController!(filtersViewController: self, didUpdateFilters: filters)
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }   
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,8 +73,32 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func yelpCategories() -> [[String:String]] {
-            return [["name" : "Middle Eastern", "code" : "mideastern"],
-                    ["name" : "Thai", "code" : "thai"]]
+            return [["name" : "American (Traditional)", "code" : "tradamerican"],
+                    ["name" : "Barbeque", "code" : "bbq"],
+                    ["name" : "Breakfast & Brunch", "code" : "breakfast_brunch"],
+                    ["name" : "Cajun/Creole", "code" : "cajun"],
+                    ["name" : "Cheesesteaks", "code" : "cheesesteaks"],
+                    ["name" : "Chinese", "code" : "chinese"],
+                    ["name" : "Cuban", "code" : "cuban"],
+                    ["name" : "Ethiopian", "code" : "ethiopian"],
+                    ["name" : "German", "code" : "german"],
+                    ["name" : "Greek", "code" : "greek"],
+                    ["name" : "Indian", "code" : "indian"],
+                    ["name" : "Italian", "code" : "italian"],
+                    ["name" : "Japanese", "code" : "japan"],
+                    ["name" : "Korean", "code" : "korean"],
+                    ["name" : "Mediterranean", "code" : "mediterranean"],
+                    ["name" : "Mexican", "code" : "mexican"],
+                    ["name" : "Middle Eastern", "code" : "mideastern"],
+                    ["name" : "Persian/Iranian", "code" : "persian"],
+                    ["name" : "Pizza", "code" : "pizza"],
+                    ["name" : "Sandwiches", "code" : "sandwiches"],
+                    ["name" : "Seafood", "code" : "seafood"],
+                    ["name" : "Steakhouses", "code" : "steak"],
+                    ["name" : "Tapas/Small Plates", "code" : "tapasmallplates"],
+                    ["name" : "Thai", "code" : "thai"],
+                    ["name" : "Vegetarian", "code" : "vegetarian"],
+                    ["name" : "Vietnamese", "code" : "vietnamese"]]
     }
 
 }
