@@ -8,11 +8,12 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     var businesses: [Business]!
+    var filteredBusinesses: [Business]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,28 +21,30 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 120
+        tableView.estimatedRowHeight = 100
+        
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.showsCancelButton = false
+        searchBar.placeholder = "Restaurants"
+        searchBar.delegate =  self
+        navigationItem.titleView = searchBar
         
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
+            self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
-            
-//            if let businesses = businesses {
-//                for business in businesses {
-//                    print(business.name!)
-//                    print(business.address!)
-//                }
-//            }
-
             }
         )
         
     }
     
+    // Delegate methods.
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if businesses != nil {
-            return businesses!.count
+        if filteredBusinesses != nil {
+            return filteredBusinesses!.count
         } else {
             return 0
         }
@@ -49,29 +52,46 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
-        
-        cell.business = businesses[indexPath.row]
-        
+        cell.business = filteredBusinesses[indexPath.row]
         return cell
     }
     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredBusinesses = searchText.isEmpty ? businesses : businesses?.filter {
+            $0.name?.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+        filteredBusinesses = businesses
+        tableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationController = segue.destination as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController
-        
         filtersViewController.delegate = self
     }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         
-        print("\(filters)")
-        
         let categories = filters["categories"] as? [String]
+        let deals = filters["offeringDeal"] as? Bool
+        let distance = filters["distance"] as? Int
+        let sort = YelpSortMode(rawValue: (filters["sortBy"] as? Int)!)
         
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance) { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
+            self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
         }
     }

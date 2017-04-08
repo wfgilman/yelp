@@ -42,5 +42,15 @@ class BusinessCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    override func prepareForReuse() {
+        nameLabel.text = nil
+        thumbImageView.image = nil
+        ratingsImageView.image = nil
+        distanceLabel.text = nil
+        reviewsCountLabel.text = nil
+        addressLabel.text = nil
+        categoriesLabel.text = nil
+    }
 
 }
