@@ -38,6 +38,9 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 45
+        
+        // TODO: Custom Header
+        // tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "SectionHeader")
 
         categories = yelpCategories()
         distances = yelpDistances()
@@ -194,6 +197,23 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             return "Categories"
         }
     }
+    
+    // TODO: Custom Header
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SectionHeader")! as UITableViewHeaderFooterView
+//        header.textLabel?.font.withSize(18)
+//        switch section {
+//        case 0:
+//            header.textLabel?.text = "Deals"
+//        case 1:
+//            header.textLabel?.text = "Distance"
+//        case 2:
+//            header.textLabel?.text = "Sort By"
+//        default:
+//            header.textLabel?.text = "Categories"
+//        }
+//        return header
+//    }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         

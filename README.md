@@ -2,7 +2,7 @@
 
 **Yelp** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
-Time spent: **13.5** hours spent in total
+Time spent: **14** hours spent in total
 
 ## User Stories
 
@@ -36,21 +36,20 @@ The following **additional** features are implemented:
 
 Stuff I wanted to implement, but didn't have time:
 
-- [ ] ...
+- [ ] Implement a custom header for the filters view.
+- [ ] Animate the expanding filters
+- [ ] Make a nice button border around the UIBarButtons
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. I don't care for the way the Distance and Sort values are passed as parameters
-to the Yelp API. There's too much setting of values in the FiltersViewController.
-I feel more of this should be moved to the UITableViewCell classes, but delegates seem
-like overkill for passing indexPath data back there. Not sure what the correct approach is here.
-2.
+1. Passing single data points between controllers. Are delegate methods overkill?
+2. Animating table view actions
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/CpEFKHz.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
