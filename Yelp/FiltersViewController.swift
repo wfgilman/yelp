@@ -10,6 +10,7 @@ import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
     @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject])
+    @objc optional func didSearch(filtersViewController: FiltersViewController, resetContentOffset didSearch: Bool)
 }
 
 class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate, DealCellDelegate, FiltersViewControllerDelegate {
@@ -45,6 +46,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBAction func onCancelButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        delegate?.didSearch?(filtersViewController: self, resetContentOffset: false)
     }
     
     @IBAction func onSearchButton(_ sender: Any) {
@@ -68,6 +70,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         
         filters["sortBy"] = currentSort as AnyObject
         
+        delegate?.didSearch?(filtersViewController: self, resetContentOffset: true)
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }   
     

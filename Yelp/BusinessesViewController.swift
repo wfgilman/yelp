@@ -20,6 +20,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var offset: Int = 0
     var limit: Int = 20
     var loadingMoreView: InfiniteScrollActivityView?
+    var resetContentOffset: Bool! = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,14 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             self.businesses = businesses
             self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if resetContentOffset! {
+            tableView.contentOffset.y = -64.0
         }
     }
     
@@ -118,6 +127,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
         }
+    }
+    
+    func didSearch(filtersViewController: FiltersViewController, resetContentOffset didSearch: Bool) {
+        self.resetContentOffset = didSearch
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
