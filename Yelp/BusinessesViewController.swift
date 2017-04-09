@@ -21,7 +21,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var limit: Int = 20
     var loadingMoreView: InfiniteScrollActivityView?
     var resetContentOffset: Bool! = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,6 +37,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         searchBar.placeholder = "Restaurants"
         searchBar.delegate =  self
         navigationItem.titleView = searchBar
+        
+        // Configure that navigation bar.
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.barTintColor = yelpRed
+            navigationBar.tintColor = UIColor.white
+        }
         
         // Infinite scrolling setup.
         let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
@@ -121,7 +127,11 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let distance = self.filters["distance"] as? Int
         let sort = YelpSortMode(rawValue: (self.filters["sortBy"] as? Int)!)
         
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
         Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, limit: nil, offset: self.offset) { (businesses: [Business]?, error: Error?) -> Void in
+            
+            MBProgressHUD.hide(for: self.view, animated: true)
             
             self.businesses = businesses
             self.filteredBusinesses = self.businesses

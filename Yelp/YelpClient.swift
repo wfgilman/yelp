@@ -16,6 +16,7 @@ let yelpConsumerKey = "vxKwwcR_NMQ7WaEiQBK_CA"
 let yelpConsumerSecret = "33QCvh5bIF5jIHR5klQr7RtBDhQ"
 let yelpToken = "uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV"
 let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
+let yelpRed = UIColor(red: 212.0 / 255.0, green: 36.0 / 255.0, blue: 34.0 / 255.0, alpha: 1.0)
 
 enum YelpSortMode: Int {
     case bestMatched = 0, distance, highestRated

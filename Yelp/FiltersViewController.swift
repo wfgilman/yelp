@@ -42,6 +42,16 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         categories = yelpCategories()
         distances = yelpDistances()
         sortStates = yelpSorts()
+        
+        // Configure navigation bar.
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.barTintColor = yelpRed
+            navigationBar.tintColor = UIColor.white
+            navigationBar.titleTextAttributes = [
+                NSFontAttributeName : UIFont.boldSystemFont(ofSize: 22),
+                NSForegroundColorAttributeName : UIColor.white
+            ]
+        }
     }
     
     @IBAction func onCancelButton(_ sender: Any) {
@@ -159,9 +169,11 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             if indexPath.row == 4 && categoriesCollapsed {
                 cell.switchLabel.text = "See All"
+                cell.switchLabel.textColor = UIColor.lightGray
                 cell.onSwitch.isHidden = true
             } else {
                 cell.switchLabel.text = categories[indexPath.row]["name"]
+                cell.switchLabel.textColor = UIColor.black
                 cell.onSwitch.isHidden = false
             }
             cell.delegate = self
