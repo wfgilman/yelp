@@ -21,6 +21,7 @@
 		BE313E591E95A8CF001D00D1 /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE313E581E95A8CF001D00D1 /* SwitchCell.swift */; };
 		BE313E5B1E95AA60001D00D1 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE313E5A1E95AA60001D00D1 /* FiltersViewController.swift */; };
 		BE5913401E9990A800B8F11D /* SortCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE59133F1E9990A800B8F11D /* SortCell.swift */; };
+		BE5913421E99B29400B8F11D /* InfiniteScrollActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5913411E99B29400B8F11D /* InfiniteScrollActivityView.swift */; };
 		BE651F361E984A3400E2D2C2 /* DistanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE651F351E984A3400E2D2C2 /* DistanceCell.swift */; };
 		BE651F381E984BA000E2D2C2 /* DealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE651F371E984BA000E2D2C2 /* DealCell.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		BE313E581E95A8CF001D00D1 /* SwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
 		BE313E5A1E95AA60001D00D1 /* FiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		BE59133F1E9990A800B8F11D /* SortCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortCell.swift; sourceTree = "<group>"; };
+		BE5913411E99B29400B8F11D /* InfiniteScrollActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfiniteScrollActivityView.swift; sourceTree = "<group>"; };
 		BE651F351E984A3400E2D2C2 /* DistanceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceCell.swift; sourceTree = "<group>"; };
 		BE651F371E984BA000E2D2C2 /* DealCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealCell.swift; sourceTree = "<group>"; };
 		C79C0AC126EDAA235847CEA2 /* Pods_Yelp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Yelp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,6 +189,7 @@
 				BE651F351E984A3400E2D2C2 /* DistanceCell.swift */,
 				BE651F371E984BA000E2D2C2 /* DealCell.swift */,
 				BE59133F1E9990A800B8F11D /* SortCell.swift */,
+				BE5913411E99B29400B8F11D /* InfiniteScrollActivityView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -335,7 +338,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		4AE591C62421400E9E10FDCC /* [CP] Embed Pods Frameworks */ = {
@@ -395,7 +398,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -410,6 +413,7 @@
 				22AAAA9C1AEA1EC300A544AF /* BusinessesViewController.swift in Sources */,
 				BE313E5B1E95AA60001D00D1 /* FiltersViewController.swift in Sources */,
 				22AAAA991AEA0A9700A544AF /* Business.swift in Sources */,
+				BE5913421E99B29400B8F11D /* InfiniteScrollActivityView.swift in Sources */,
 				BE5913401E9990A800B8F11D /* SortCell.swift in Sources */,
 				222D8A7D19CCFAE000D2DB53 /* YelpClient.swift in Sources */,
 				BE651F381E984BA000E2D2C2 /* DealCell.swift in Sources */,

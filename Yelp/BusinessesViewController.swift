@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import MBProgressHUD
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     var businesses: [Business]!
     var filteredBusinesses: [Business]!
+    var filters = [String : AnyObject]()
+    var isMoreDataLoading: Bool! = false
+    var offset: Int = 0
+    var limit: Int = 20
+    var loadingMoreView: InfiniteScrollActivityView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +29,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
         
+        // Configure search bar.
         let searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.showsCancelButton = false
@@ -30,14 +37,32 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         searchBar.delegate =  self
         navigationItem.titleView = searchBar
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        // Infinite scrolling setup.
+        let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset
+        insets.bottom += InfiniteScrollActivityView.defaultHeight
+        tableView.contentInset = insets
+        
+        // Fetch businesses.
+        let categories = self.filters["categories"] as? [String]
+        let deals = self.filters["offeringDeal"] as? Bool
+        let distance = self.filters["distance"] as? Int
+        let sort = YelpSortMode(rawValue: (self.filters["sortBy"] as? Int ?? 0)!)
+        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, limit: self.limit, offset: self.offset) { (businesses: [Business]?, error: Error?) -> Void in
+            
+            MBProgressHUD.hide(for: self.view, animated: true)
             
             self.businesses = businesses
             self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
-            }
-        )
-        
+        }
     }
     
     // Delegate methods.
@@ -75,20 +100,19 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.reloadData()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navigationController = segue.destination as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FiltersViewController
-        filtersViewController.delegate = self
-    }
-    
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         
-        let categories = filters["categories"] as? [String]
-        let deals = filters["offeringDeal"] as? Bool
-        let distance = filters["distance"] as? Int
-        let sort = YelpSortMode(rawValue: (filters["sortBy"] as? Int)!)
+        // Since we're initiating a new search, reset offset to zero.
+        self.offset = 0
         
-        Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance) { (businesses: [Business]?, error: Error?) -> Void in
+        self.filters = filters
+        
+        let categories = self.filters["categories"] as? [String]
+        let deals = self.filters["offeringDeal"] as? Bool
+        let distance = self.filters["distance"] as? Int
+        let sort = YelpSortMode(rawValue: (self.filters["sortBy"] as? Int)!)
+        
+        Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, limit: nil, offset: self.offset) { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
             self.filteredBusinesses = self.businesses
@@ -96,5 +120,54 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let categories = self.filters["categories"] as? [String]
+        let deals = self.filters["offeringDeal"] as? Bool
+        let distance = self.filters["distance"] as? Int
+        let sort = YelpSortMode(rawValue: (self.filters["sortBy"] as? Int ?? 0)!)
+        
+        if !isMoreDataLoading {
+            
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            if (scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                
+                isMoreDataLoading = true
+                
+                // Get the next 20 results
+                self.offset += 20
+                
+                // Display the loadingMoreView
+                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
+                Business.searchWithTerm(term: "Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, limit: self.limit, offset: self.offset) { (businesses: [Business]?, error: Error?) -> Void in
+                    
+                    self.isMoreDataLoading = false
+                    self.loadingMoreView!.stopAnimating()
+                    
+                    if businesses != nil {
+                        for business in businesses! {
+                            self.businesses.append(business)
+                        }
+                    }
+                    self.filteredBusinesses = self.businesses
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
     
+    // Segue method.
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navigationController = segue.destination as! UINavigationController
+        let filtersViewController = navigationController.topViewController as! FiltersViewController
+        filtersViewController.delegate = self
+    }
+    
+
 }
