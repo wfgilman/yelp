@@ -116,7 +116,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 tableView.reloadData()
             default:
                 distanceCellSelected = true
-                tableView.reloadData()
+                tableView.reloadSections(IndexSet([1]), with: .automatic)
             }
         } else if indexPath.section == 2 {
             switch sortCellSelected {
@@ -127,7 +127,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 tableView.reloadData()
             default:
                 sortCellSelected = true
-                tableView.reloadData()
+                tableView.reloadSections(IndexSet([2]), with: .automatic)
             }
         } else if indexPath.section == 3 {
             switch categoriesCollapsed {
